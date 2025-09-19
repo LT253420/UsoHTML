@@ -1,50 +1,135 @@
-import React, { useState } from "https://esm.sh/react@18.2.0";
+// React + Router desde CDN (ESM)
+import React from "https://esm.sh/react@18.2.0";
 import { createRoot } from "https://esm.sh/react-dom@18.2.0/client";
 import {
-  BrowserRouter, Routes, Route, Link, useNavigate, useSearchParams
+  BrowserRouter, HashRouter, Routes, Route, Link, Navigate,
+  useNavigate, useSearchParams
 } from "https://esm.sh/react-router-dom@6.22.3";
 
-/* -------------------- Layout básico -------------------- */
-function Layout({ children }) {
-  return (
-    <div className="container">
-      {children}
+// Firebase (v9 modular ESM) desde CDN
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signOut,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  sendPasswordResetEmail, confirmPasswordReset,
+  GoogleAuthProvider, signInWithPopup
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+/* -------------------- Firebase config (tu proyecto) -------------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyBAPn3lBm5P8btiahsEhP8pf_wmnsBM_MI",
+  authDomain: "fallasenplaca.firebaseapp.com",
+  projectId: "fallasenplaca",
+  storageBucket: "fallasenplaca.firebasestorage.app",
+  messagingSenderId: "580763455141",
+  appId: "1:580763455141:web:0a685d38783a5acfdf874c"
+};
+
+// Init
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+/* -------------------- Router helper (file:// -> HashRouter) -------------------- */
+const RouterImpl = (window.location.protocol === "file:") ? HashRouter : BrowserRouter;
+
+/* -------------------- Auth Context -------------------- */
+const AuthContext = React.createContext({ user: undefined }); // undefined = cargando
+
+function AuthProvider({ children }) {
+  const [user, setUser] = React.useState(undefined);
+
+  React.useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setUser(u ?? null));
+    return () => unsub();
+  }, []);
+
+  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
+}
+const useAuth = () => React.useContext(AuthContext);
+
+/* -------------------- Componentes UI básicos -------------------- */
+const Layout = ({ children }) => (
+  <div className="container">
+    <div className="topbar">
+      <div className="row">
+        <span className="brand">Diagnóstico de fallas</span>
+        <span className="badge">Auth</span>
+      </div>
+      <UserChip/>
     </div>
-  );
+    {children}
+  </div>
+);
+
+function Loader(){ return <div className="loader" aria-label="Cargando..."/>; }
+
+function UserChip(){
+  const { user } = useAuth();
+  if (user === undefined) return <span className="small">Verificando sesión…</span>;
+  if (!user) return <span className="small">Sesión: invitado</span>;
+  return <span className="small">Sesión: {user.email}</span>;
 }
 
-/* -------------------- Guard / Wrapper home -------------------- */
-// NOTE: Aquí iría tu verificación real (Firebase auth currentUser, etc.)
-function Guard({ Component }) {
-  const isAuth = false; // placeholder. Reemplazar por estado real.
-  const nav = useNavigate();
-  if (!isAuth) { nav("/ingresar", { replace:true }); return null; }
-  return <Component/>;
+/* -------------------- Guard de ruta protegida -------------------- */
+function Guard({ children }) {
+  const { user } = useAuth();
+  if (user === undefined) return <Loader/>;
+  if (!user) return <Navigate to="/ingresar" replace />;
+  return children;
 }
 
 /* -------------------- Pantallas -------------------- */
 function Home() {
+  const { user } = useAuth();
+  const nav = useNavigate();
+
+  const logout = async () => {
+    await signOut(auth);
+    nav("/ingresar");
+  };
+
   return (
     <Layout>
       <div className="card">
         <div className="h1">Inicio</div>
-        <div className="h2">Bienvenido/a</div>
-        <div className="small">Esta ruta está protegida por un guard.</div>
+        <div className="h2">Bienvenido/a{user ? `, ${user.email}` : ""}</div>
+        <div className="spacer"></div>
+        <div className="row">
+          <button className="btn" onClick={()=>nav("/ingresar")}>Ir a Ingresar</button>
+          <button className="btn" onClick={()=>nav("/registro")}>Ir a Registro</button>
+          <button className="btn primary" onClick={logout}>Cerrar sesión</button>
+        </div>
       </div>
     </Layout>
   );
 }
 
 function Ingresar() {
-  const [email,setEmail]=useState("");
-  const [pass,setPass]=useState("");
+  const [email,setEmail]=React.useState("");
+  const [pass,setPass]=React.useState("");
+  const [err,setErr]=React.useState("");
   const nav = useNavigate();
 
-  const onSubmit = (e)=> {
+  const onSubmit = async (e)=>{
     e.preventDefault();
-    // TODO: Firebase signInWithEmailAndPassword(auth, email, pass)
-    // si ok: nav("/")
-    nav("/");
+    setErr("");
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
+      nav("/");
+    }catch(error){
+      setErr(mapeoError(error));
+    }
+  };
+
+  const loginGoogle = async ()=>{
+    setErr("");
+    try{
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      nav("/");
+    }catch(error){
+      setErr(mapeoError(error));
+    }
   };
 
   return (
@@ -57,6 +142,10 @@ function Ingresar() {
           <input className="input" type="password" placeholder="Contraseña" value={pass} onChange={e=>setPass(e.target.value)} required />
           <button className="btn primary" type="submit">Entrar</button>
         </form>
+        <div className="row">
+          <button className="btn" onClick={loginGoogle}>Ingresar con Google</button>
+        </div>
+        {!!err && <div className="small" style={{color:"#ff9b9b"}}>{err}</div>}
         <div className="spacer"></div>
         <div className="row">
           <Link className="link" to="/recuperar-contraseña">¿Olvidaste tu contraseña?</Link>
@@ -72,14 +161,22 @@ function Ingresar() {
 }
 
 function Registro() {
-  const [email,setEmail]=useState("");
-  const [pass,setPass]=useState("");
+  const [email,setEmail]=React.useState("");
+  const [pass,setPass]=React.useState("");
+  const [err,setErr]=React.useState("");
   const nav=useNavigate();
-  const onSubmit=(e)=>{
+
+  const onSubmit=async (e)=>{
     e.preventDefault();
-    // TODO: Firebase createUserWithEmailAndPassword(auth, email, pass)
-    nav("/ingresar");
+    setErr("");
+    try{
+      await createUserWithEmailAndPassword(auth, email, pass);
+      nav("/ingresar");
+    }catch(error){
+      setErr(mapeoError(error));
+    }
   };
+
   return (
     <Layout>
       <div className="card">
@@ -90,6 +187,7 @@ function Registro() {
           <input className="input" type="password" placeholder="Contraseña" value={pass} onChange={e=>setPass(e.target.value)} required />
           <button className="btn primary" type="submit">Crear cuenta</button>
         </form>
+        {!!err && <div className="small" style={{color:"#ff9b9b"}}>{err}</div>}
         <div className="spacer"></div>
         <Link className="link" to="/ingresar">Volver al inicio</Link>
       </div>
@@ -98,12 +196,21 @@ function Registro() {
 }
 
 function RecuperarContrasena() {
-  const [email,setEmail]=useState("");
-  const onSubmit=(e)=>{
+  const [email,setEmail]=React.useState("");
+  const [msg,setMsg]=React.useState("");
+  const [err,setErr]=React.useState("");
+
+  const onSubmit=async (e)=>{
     e.preventDefault();
-    // TODO: Firebase sendPasswordResetEmail(auth, email)
-    alert("Si el correo existe, se envió un email de recuperación.");
+    setMsg(""); setErr("");
+    try{
+      await sendPasswordResetEmail(auth, email);
+      setMsg("Si el correo existe, se envió un email de recuperación.");
+    }catch(error){
+      setErr(mapeoError(error));
+    }
   };
+
   return (
     <Layout>
       <div className="card">
@@ -114,6 +221,8 @@ function RecuperarContrasena() {
           <input className="input" type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} required />
           <button className="btn primary" type="submit">Enviar</button>
         </form>
+        {msg && <div className="small" style={{color:"#9bffb0"}}>{msg}</div>}
+        {err && <div className="small" style={{color:"#ff9b9b"}}>{err}</div>}
         <div className="spacer"></div>
         <div className="center small">
           <Link className="link" to="/ingresar">Volver al inicio</Link>
@@ -124,15 +233,24 @@ function RecuperarContrasena() {
 }
 
 function ReestablecerContrasena() {
-  // Suponiendo ?oobCode=... en la URL (como hace Firebase)
   const [params] = useSearchParams();
-  const [pass,setPass]=useState("");
+  const [pass,setPass]=React.useState("");
+  const [msg,setMsg]=React.useState("");
+  const [err,setErr]=React.useState("");
   const oobCode = params.get("oobCode");
-  const onSubmit=(e)=>{
+
+  const onSubmit=async (e)=>{
     e.preventDefault();
-    // TODO: Firebase confirmPasswordReset(auth, oobCode, pass)
-    alert("Contraseña actualizada.");
+    setMsg(""); setErr("");
+    try{
+      if (!oobCode) throw new Error("missing-code");
+      await confirmPasswordReset(auth, oobCode, pass);
+      setMsg("Contraseña actualizada. Ya podés ingresar con tu nueva clave.");
+    }catch(error){
+      setErr(mapeoError(error));
+    }
   };
+
   return (
     <Layout>
       <div className="card">
@@ -142,7 +260,9 @@ function ReestablecerContrasena() {
           <input className="input" type="password" placeholder="Nueva contraseña" value={pass} onChange={e=>setPass(e.target.value)} required />
           <button className="btn primary" type="submit" disabled={!oobCode}>Actualizar</button>
         </form>
-        {!oobCode && <div className="small">Falta el código de verificación en la URL.</div>}
+        {!oobCode && <div className="small" style={{color:"#ff9b9b"}}>Falta el código de verificación en la URL.</div>}
+        {msg && <div className="small" style={{color:"#9bffb0"}}>{msg}</div>}
+        {err && <div className="small" style={{color:"#ff9b9b"}}>{err}</div>}
       </div>
     </Layout>
   );
@@ -161,20 +281,38 @@ function NotFound(){
   );
 }
 
-/* -------------------- App + Router (mismas rutas) -------------------- */
+/* -------------------- Mapeo simple de errores -------------------- */
+function mapeoError(e){
+  const code = e?.code || e?.message || String(e);
+  if (code.includes("auth/invalid-email")) return "Email inválido.";
+  if (code.includes("auth/user-not-found")) return "Usuario no encontrado.";
+  if (code.includes("auth/wrong-password")) return "Contraseña incorrecta.";
+  if (code.includes("auth/email-already-in-use")) return "Ese email ya está registrado.";
+  if (code.includes("missing-code")) return "Falta el código de verificación.";
+  return "Error: " + code;
+}
+
+/* -------------------- App + Rutas -------------------- */
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
       <Routes>
-        <Route path="/" element={<Guard Component={Home}/>}/>
-        <Route path="/registro" element={<Registro/>}/>
-        <Route path="/ingresar" element={<Ingresar/>}/>
-        <Route path="/recuperar-contraseña" element={<RecuperarContrasena/>}/>
-        <Route path="/reestablecer-contraseña" element={<ReestablecerContrasena/>}/>
-        <Route path="*" element={<NotFound/>}/>
+        <Route path="/" element={<Guard><Home/></Guard>} />
+        <Route path="/registro" element={<Registro/>} />
+        <Route path="/ingresar" element={<Ingresar/>} />
+        <Route path="/recuperar-contraseña" element={<RecuperarContrasena/>} />
+        <Route path="/reestablecer-contraseña" element={<ReestablecerContrasena/>} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
-    </BrowserRouter>
+    </AuthProvider>
   );
 }
 
-createRoot(document.getElementById("root")).render(<React.StrictMode><App/></React.StrictMode>);
+/* -------------------- Mount -------------------- */
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterImpl>
+      <App/>
+    </RouterImpl>
+  </React.StrictMode>
+);
