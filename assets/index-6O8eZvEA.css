@@ -3,7 +3,26 @@
     text-decoration: underline dotted
 }
 
-h1,h2,h3,h4,h5,h6 {
+/* Título principal */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-shadow: 0 0 8px var(--color-principal);
+  color: var(--color-principal);
+}
+
+
+/* Subtítulo de fallas */
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-shadow: 0 0 8px var(--color-principal);
+  color: #ffffff;
+}
+
+h3,h4,h5,h6 {
     font-size: inherit;
     font-weight: inherit
 }
@@ -1104,5 +1123,258 @@ button.branch-btn.incorrecta:hover {
   background: rgba(255, 0, 0, 0.15);
   box-shadow: 0 0 15px #ff0000;
 }
+
+/* Botón flotante HOME */
+.back-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 55px;
+  height: 55px;
+  border: 2px solid var(--color-principal);
+  background: #292929;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--color-luz);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.back-button svg {
+  fill: var(--color-principal);
+  width: 24px;
+  height: 24px;
+  transition: fill 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: var(--color-principal);
+}
+
+.back-button:hover svg {
+  fill: #222222;
+}
+
+
+/* Contenedor del login */
+#loginContainer {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ANIMACIÓN DE CARGA */
+#preloader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 300px;
+  height: 50px;
+  position: relative;
+}
+
+.percentage {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  font-size: 1.2rem;
+  color: var(--color-principal);
+  text-shadow: 0 0 8px var(--color-principal);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  border: 2px solid var(--color-principal);
+  box-shadow: 0 0 10px var(--color-principal);
+  background: rgba(0, 255, 104, 0.1);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-principal);
+  width: 0%;
+  transition: width 0.2s ease-out;
+  box-shadow: 0 0 10px var(--color-principal);
+}
+
+.flash {
+  animation: flash 0.3s ease-in-out 2;
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
+ @keyframes holographic-fade {
+  0% {
+    opacity: 0;
+    filter: brightness(0.3) blur(2px);
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) blur(0px);
+    transform: scale(1);
+  }
+}
+
+.holo-anim {
+  animation: holographic-fade 0.4s ease-out;
+}
+
+
+  .response-box {
+    font-size: 0.95rem;
+  }
+}
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hudFade {
+  0% {
+    opacity: 0;
+    filter: drop-shadow(0 0 8px var(--color-principal));
+  }
+  30% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px var(--color-principal));
+  }
+  60% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px var(--color-principal));
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes hudFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+    filter: drop-shadow(0 0 8px var(--color-principal));
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 12px var(--color-principal));
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px var(--color-principal));
+  }
+}
+
+.hud-appear {
+  animation: hudFade 0.4s ease-out;
+}
+
+/* ================== INPUTS HOLOGRÁFICOS ================== */
+input.response-box {
+  background: transparent;
+  border: 2px solid var(--color-principal); /* borde con tu variable */
+  color: var(--color-principal); /* texto */
+  padding: 10px 12px;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px var(--color-luz); /* brillo suave */
+}
+
+input.response-box::placeholder {
+  color: var(--color-luz); /* placeholder más transparente */
+  text-align: center;
+}
+
+input.response-box:focus {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 20px var(--color-principal); /* glow más fuerte al focus */
+  background: var(--color-fondo-luz); /* podés cambiar este color a usar var(--color-luz) si querés */
+}
+
+/* ====== Estados de error para el input (holográfico rojo) ====== */
+input.response-box.error {
+  border: 2px solid var(--color-error);
+  color: var(--color-error);
+  box-shadow: 0 0 20px rgba(255, 68, 68, 0.8);
+  background: rgba(255, 68, 68, 0.05);
+}
+
+/* Efecto 'temblor' corto */
+.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-8px); }
+  40%, 60% { transform: translateX(8px); }
+}
+
+
+/* Placeholder */
+input.response-box::placeholder {
+  color: var(--color-principal);
+  text-align: center;
+  opacity: .7;
+}
+
+/* Focus */
+input.response-box:focus {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 20px var(--color-luz);
+  background: color-mix(in oklab, var(--color-principal) 7%, transparent);
+}
+
+/* ------- Autofill Chrome/Edge en password ------- */
+input[type="password"].response-box:-webkit-autofill,
+input[type="password"].response-box:-webkit-autofill:hover,
+input[type="password"].response-box:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-principal) !important;
+  border: 2px solid var(--color-principal) !important;
+  /* Pintamos el fondo que impone Chrome con un inset gigante */
+  -webkit-box-shadow: 0 0 0 1000px rgba(0, 255, 0, 0.08) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0, 255, 0, 0.08) inset !important;
+  caret-color: var(--color-principal) !important;
+  transition: background-color 9999s ease-out 0s; /* truco para que no “parpadee” */
+}
+
+/* Por si el autofill mete otra fuente/tamaño en la 1ª línea */
+input[type="password"].response-box:-webkit-autofill::first-line {
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-principal);
+}
+
 
 
