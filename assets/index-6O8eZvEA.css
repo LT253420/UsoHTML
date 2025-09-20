@@ -804,8 +804,6 @@ img,video {
 /* ---------- Variables y fondos ---------- */
 :root {
   --fondo-color: #262626;
-  --fondo-imagen: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAQAAADQ7KleAAAACXBIWXMAAAsSAAALEgHS3X78AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAA+4SURBVHja7J1dbBxXGYZ3ncR2jUloLqxGKWorKuANrUR...SU5ErkJggg=='); /* recortado por brevedad: usa tu base64 completa */
-  --fondo-imagen-claro: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAQAAADQ7KleAAAACXBIWXMAAAsSAAALEgHS3X78AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAABJRSURBVHja7J17jFzVfYC/8a696/...SU5ErkJggg=='); /* idem */
   --color-principal: #00c3ff;
   --color-luz: #00c3ffcc;
   --color-fondo-luz: #00c3ff0d;
@@ -1106,4 +1104,5 @@ button.branch-btn.incorrecta:hover {
   background: rgba(255, 0, 0, 0.15);
   box-shadow: 0 0 15px #ff0000;
 }
+
 
