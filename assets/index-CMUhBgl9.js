@@ -17952,14 +17952,12 @@ function hS() {
                 className: "hover:text-blue-1 text-blue-2",
                 onClick: r(),
                 children: "Volver atrás"
-            }), ((u = (l = (a = e == null ? void 0 : e[e.length - 1]) == null ? void 0 : a.options) == null ? void 0 : l[0]) == null ? void 0 : u.solution) && g.jsx("button", {
-                className: "hover:text-blue-1 text-blue-2",
-                onClick: i(),
-                children: "Regresar al inicio"
-            })]
-        })]
-    })
-}
+            }) 
+            ]
+          })]
+        })
+    }
+
 function mS() {
     return g.jsxs("main", {
         className: "bg-white-1 flex-col flex w-full min-h-screen h-full px-4",
@@ -18380,16 +18378,11 @@ function CS() {
                     className: "text-2xl font-bold text-blue-3",
                     children: "Página no encontrada"
                 })]
-            }), g.jsx(Vt, {
-                type: "link",
-                variant: "primary",
-                className: "h-10",
-                href: "/",
-                children: "Volver al inicio"
-            })]
+            })
+       ]     })
         })
-    })
-}
+    }
+
 const kS = ({ oobCode: e }) => {
     const { isLoading: t, setIsLoading: n } = y.useContext(En)
         , r = Yt()
@@ -18473,17 +18466,11 @@ function xS() {
                     children: g.jsx(kS, {
                         oobCode: t
                     })
-                }), g.jsx("p", {
-                    className: "mt-10 text-center text-sm text-gray-500",
-                    children: g.jsx(lr, {
-                        to: "/ingresar",
-                        className: "font-semibold leading-6 text-indigo-600 hover:text-indigo-500",
-                        children: "Volver al inicio"
-                    })
-                })]
-            })
-        })
-}
+                })
+                 ]   })
+                })
+            }
+    
 const PS = () => {
     const { isLoading: e, setIsLoading: t } = y.useContext(En)
         , n = ({ data: o }) => {
@@ -18553,17 +18540,12 @@ function TS() {
             }), g.jsx("div", {
                 className: "mt-10 sm:mx-auto sm:w-full bg-white rounded-lg shadow-md px-6 py-12 lg:px-8",
                 children: g.jsx(PS, {})
-            }), g.jsx("p", {
-                className: "mt-10 text-center text-sm text-gray-500",
-                children: g.jsx(lr, {
-                    to: "/ingresar",
-                    className: "font-semibold leading-6 text-indigo-600 hover:text-indigo-500",
-                    children: "Volver al inicio"
-                })
-            })]
-        })
-    })
-}
+            })
+              ]  })
+            })
+        }
+    
+
 Ph(document.getElementById("root")).render(g.jsx(nl.StrictMode, {
     children: g.jsx(c_, {
         children: g.jsx(lS, {
