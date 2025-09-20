@@ -817,6 +817,8 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+font-family: Consolas, "Courier New", monospace !important;
+  font-size: 18px !important
 }
 
 body {
@@ -1104,3 +1106,4 @@ button.branch-btn.incorrecta:hover {
   background: rgba(255, 0, 0, 0.15);
   box-shadow: 0 0 15px #ff0000;
 }
+
