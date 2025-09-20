@@ -1097,3 +1097,78 @@ button.branch-btn.incorrecta:hover{ background:rgba(255,0,0,.15); box-shadow:0 0
 * { user-select: auto !important; }
 
 
+/* ===== Botones de ramas holográficos ===== */
+button.branch-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .75rem;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid var(--color-principal);
+  background: transparent;
+  color: var(--color-principal);
+  font-size: 1rem;
+  box-shadow: 0 0 8px var(--color-luz);
+  transition: background .25s ease, box-shadow .25s ease, transform .06s ease;
+  overflow: hidden; /* importante para que la franja no desborde */
+}
+
+button.branch-btn .label {
+  pointer-events: none; /* el texto no bloquea clicks */
+  flex: 1;
+  text-align: left;
+}
+
+/* Franja lateral con “>” */
+button.branch-btn::after {
+  content: ">";
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 58px; /* ancho de la franja */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: #0a0a0a; /* default */
+  border-left: 2px solid var(--color-principal);
+  color: #111;
+  transition: background .25s ease, border-left-color .25s ease;
+}
+
+/* Estado CORRECTA */
+button.branch-btn.correcta {
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 10px #00ff00;
+}
+button.branch-btn.correcta::after {
+  background-color: #00ff00;
+  border-left-color: #00ff00;
+}
+button.branch-btn.correcta:hover {
+  background: rgba(0, 255, 0, 0.15);
+  box-shadow: 0 0 15px #00ff00;
+}
+
+/* Estado INCORRECTA */
+button.branch-btn.incorrecta {
+  border-color: #ff0000;
+  color: #ff0000;
+  box-shadow: 0 0 10px #ff0000;
+}
+button.branch-btn.incorrecta::after {
+  background-color: #ff0000;
+  border-left-color: #ff0000;
+}
+button.branch-btn.incorrecta:hover {
+  background: rgba(255, 0, 0, 0.15);
+  box-shadow: 0 0 15px #ff0000;
+}
+
+
+
