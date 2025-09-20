@@ -15259,20 +15259,17 @@ xe.createPortal = function (e, t) {
     return sw(e, t, null, n)
 }
     ;
-xe.createRoot = function (e, t) {
-    if (!ou(e))
-        throw Error(E(299));
-    var n = !1
-        , r = ""
-        , i = fh;
-    return t != null && (t.unstable_strictMode === !0 && (n = !0),
-        t.identifierPrefix !== void 0 && (r = t.identifierPrefix),
-        t.onRecoverableError !== void 0 && (i = t.onRecoverableError)),
-        t = nu(e, 1, !1, null, null, n, !1, r, i),
-        e[ct] = t.current,
-        Gr(e.nodeType === 8 ? e.parentNode : e),
-        new iu(t)
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const mount = document.getElementById('placaTree'); // o 'appContent' según tu HTML
+  if (!mount) return console.error('No se encontró el nodo de montaje');
+
+  // evitar crear más de un root (causa el #299)
+  if (!mount._reactRoot) {
+    mount._reactRoot = xe.createRoot(mount); // en algunos builds es ReactDOM.createRoot
+  }
+  mount._reactRoot.render(React.createElement(App));
+});
+
     ;
 xe.findDOMNode = function (e) {
     if (e == null)
@@ -18595,3 +18592,4 @@ Ph(document.getElementById("root")).render(g.jsx(nl.StrictMode, {
         })
     })
 }));
+
