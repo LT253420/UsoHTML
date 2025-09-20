@@ -1,12 +1,13 @@
 // === React + Router (ESM por CDN) SIN JSX con htm ===
-// Forzamos que TODAS las librerías usen la MISMA copia de React 18.2.0.
 import React from "https://esm.sh/react@18.2.0";
 import { createRoot } from "https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0";
 import {
   HashRouter, Routes, Route, Link, Navigate,
   useNavigate, useSearchParams
 } from "https://esm.sh/react-router-dom@6.22.3?deps=react@18.2.0,react-dom@18.2.0";
-import html from "https://esm.sh/htm@3.1.1/react?deps=react@18.2.0";
+// ✔ htm correcto: paquete base y bind a React.createElement
+import htm from "https://esm.sh/htm@3.1.1";
+const html = htm.bind(React.createElement);
 
 // === Firebase v9 modular (ESM) ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
@@ -275,7 +276,7 @@ function App() {
   `;
 }
 
-// ---------- Montaje ----------
+// ---------- Montaje (con captura de errores) ----------
 try {
   createRoot(document.getElementById("root")).render(
     html`<${HashRouter}><${App}/><//>`
