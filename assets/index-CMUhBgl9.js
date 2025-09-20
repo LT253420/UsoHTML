@@ -16436,10 +16436,13 @@ function Vt({ variant: e, type: t, href: n, className: r, onClick: i, children: 
         target: l,
         children: o
     }) : g.jsx("button", {
-  className: `branch-btn ${estado === "correcta" ? "correcta" : estado === "incorrecta" ? "incorrecta" : ""}`,
-  children: "Texto"
-})
-
+        className: `${id[e]} ${od} ${r}`,
+        onClick: i,
+        disabled: s,
+        type: a,
+        children: o
+    })
+}
 const En = y.createContext({
     user: mt.currentUser,
     isLoading: !1,
@@ -18574,4 +18577,3 @@ Ph(document.getElementById("root")).render(g.jsx(nl.StrictMode, {
         })
     })
 }));
-
