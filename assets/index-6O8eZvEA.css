@@ -53,6 +53,8 @@ html,:host {
 }
 
 body {
+    font-family: Consolas,"Courier New",monospace;
+  font-size: 18px; /* 👈 lo podés agregar aquí */
     margin: 0;
     line-height: inherit
 }
