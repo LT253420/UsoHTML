@@ -87,4 +87,205 @@ function Home() {
         <div className="row">
           <button className="btn" onClick=${() => nav("/ingresar")}>Ir a Ingresar</button>
           <button className="btn" onClick=${() => nav("/registro")}>Ir a Registro</button>
-          <button cl
+          <button className="btn primary" onClick=${logout}>Cerrar sesión</button>
+        </div>
+      </div>
+    <//>
+  `;
+}
+
+function Ingresar() {
+  const [email,setEmail]=React.useState("");
+  const [pass,setPass]=React.useState("");
+  const [err,setErr]=React.useState("");
+  const nav = useNavigate();
+
+  const onSubmit = async (e)=>{
+    e.preventDefault(); setErr("");
+    try{ await signInWithEmailAndPassword(auth, email, pass); nav("/"); }
+    catch(error){ setErr(mapeoError(error)); }
+  };
+
+  const loginGoogle = async ()=>{
+    setErr("");
+    try{ const provider = new GoogleAuthProvider(); await signInWithPopup(auth, provider); nav("/"); }
+    catch(error){ setErr(mapeoError(error)); }
+  };
+
+  return html`
+    <${Layout}>
+      <div className="card">
+        <div className="h1">Ingresar</div>
+        <div className="spacer"></div>
+        <form onSubmit=${onSubmit} className="col">
+          <input className="input" type="email" placeholder="Email" value=${email} onChange=${e=>setEmail(e.target.value)} required />
+          <input className="input" type="password" placeholder="Contraseña" value=${pass} onChange=${e=>setPass(e.target.value)} required />
+          <button className="btn primary" type="submit">Entrar</button>
+        </form>
+        <div className="row">
+          <button className="btn" onClick=${loginGoogle}>Ingresar con Google</button>
+        </div>
+        ${err && html`<div className="small" style=${{color:"#ff9b9b"}}>${err}</div>`}
+        <div className="spacer"></div>
+        <div className="row">
+          <${Link} className="link" to="/recuperar-contraseña">¿Olvidaste tu contraseña?<//>
+        </div>
+        <div className="spacer"></div>
+        <div className="row">
+          <span className="small">¿No tenés cuenta?</span>
+          <${Link} className="link" to="/registro">Crear cuenta<//>
+        </div>
+      </div>
+    <//>
+  `;
+}
+
+function Registro() {
+  const [email,setEmail]=React.useState("");
+  const [pass,setPass]=React.useState("");
+  const [err,setErr]=React.useState("");
+  const nav=useNavigate();
+
+  const onSubmit=async (e)=>{
+    e.preventDefault(); setErr("");
+    try{ await createUserWithEmailAndPassword(auth, email, pass); nav("/ingresar"); }
+    catch(error){ setErr(mapeoError(error)); }
+  };
+
+  return html`
+    <${Layout}>
+      <div className="card">
+        <div className="h1">Registro</div>
+        <div className="spacer"></div>
+        <form onSubmit=${onSubmit} className="col">
+          <input className="input" type="email" placeholder="Email" value=${email} onChange=${e=>setEmail(e.target.value)} required />
+          <input className="input" type="password" placeholder="Contraseña" value=${pass} onChange=${e=>setPass(e.target.value)} required />
+          <button className="btn primary" type="submit">Crear cuenta</button>
+        </form>
+        ${err && html`<div className="small" style=${{color:"#ff9b9b"}}>${err}</div>`}
+        <div className="spacer"></div>
+        <${Link} className="link" to="/ingresar">Volver al inicio<//>
+      </div>
+    <//>
+  `;
+}
+
+function RecuperarContrasena() {
+  const [email,setEmail]=React.useState("");
+  const [msg,setMsg]=React.useState("");
+  const [err,setErr]=React.useState("");
+
+  const onSubmit=async (e)=>{
+    e.preventDefault(); setMsg(""); setErr("");
+    try{ await sendPasswordResetEmail(auth, email); setMsg("Si el correo existe, se envió un email de recuperación."); }
+    catch(error){ setErr(mapeoError(error)); }
+  };
+
+  return html`
+    <${Layout}>
+      <div className="card">
+        <div className="h1">Recuperar contraseña</div>
+        <div className="h2">Ingrese su correo electrónico para enviar un email de recuperación</div>
+        <div className="spacer"></div>
+        <form onSubmit=${onSubmit} className="col">
+          <input className="input" type="email" placeholder="Email" value=${email} onChange=${e=>setEmail(e.target.value)} required />
+          <button className="btn primary" type="submit">Enviar</button>
+        </form>
+        ${msg && html`<div className="small" style=${{color:"#9bffb0"}}>${msg}</div>`}
+        ${err && html`<div className="small" style=${{color:"#ff9b9b"}}>${err}</div>`}
+        <div className="spacer"></div>
+        <div className="center small">
+          <${Link} className="link" to="/ingresar">Volver al inicio<//>
+        </div>
+      </div>
+    <//>
+  `;
+}
+
+function ReestablecerContrasena() {
+  const [params] = useSearchParams();
+  const [pass,setPass]=React.useState("");
+  const [msg,setMsg]=React.useState("");
+  const [err,setErr]=React.useState("");
+  const oobCode = params.get("oobCode");
+
+  const onSubmit=async (e)=>{
+    e.preventDefault(); setMsg(""); setErr("");
+    try{
+      if (!oobCode) throw new Error("missing-code");
+      await confirmPasswordReset(auth, oobCode, pass);
+      setMsg("Contraseña actualizada. Ya podés ingresar con tu nueva clave.");
+    }catch(error){ setErr(mapeoError(error)); }
+  };
+
+  return html`
+    <${Layout}>
+      <div className="card">
+        <div className="h1">Reestablecer contraseña</div>
+        <div className="spacer"></div>
+        <form onSubmit=${onSubmit} className="col">
+          <input className="input" type="password" placeholder="Nueva contraseña" value=${pass} onChange=${e=>setPass(e.target.value)} required />
+          <button className="btn primary" type="submit" disabled=${!oobCode}>Actualizar</button>
+        </form>
+        ${!oobCode && html`<div className="small" style=${{color:"#ff9b9b"}}>Falta el código de verificación en la URL.</div>`}
+        ${msg && html`<div className="small" style=${{color:"#9bffb0"}}>${msg}</div>`}
+        ${err && html`<div className="small" style=${{color:"#ff9b9b"}}>${err}</div>`}
+      </div>
+    <//>
+  `;
+}
+
+function NotFound(){
+  return html`
+    <${Layout}>
+      <div className="card">
+        <div className="h1">404</div>
+        <div className="h2">Ruta no encontrada</div>
+        <div className="spacer"></div>
+        <${Link} className="link" to="/ingresar">Volver al inicio<//>
+      </div>
+    <//>
+  `;
+}
+
+// ---------- Mapeo simple de errores ----------
+function mapeoError(e){
+  const code = e?.code || e?.message || String(e);
+  if (code.includes("auth/invalid-email")) return "Email inválido.";
+  if (code.includes("auth/user-not-found")) return "Usuario no encontrado.";
+  if (code.includes("auth/wrong-password")) return "Contraseña incorrecta.";
+  if (code.includes("auth/email-already-in-use")) return "Ese email ya está registrado.";
+  if (code.includes("missing-code")) return "Falta el código de verificación.";
+  return "Error: " + code;
+}
+
+// ---------- App + Rutas (HashRouter) ----------
+function App() {
+  return html`
+    <${AuthProvider}>
+      <${Routes}>
+        <${Route} path="/" element=${html`<${Guard}><${Home}/><//>`} />
+        <${Route} path="/registro" element=${html`<${Registro}/>`} />
+        <${Route} path="/ingresar" element=${html`<${Ingresar}/>`} />
+        <${Route} path="/recuperar-contraseña" element=${html`<${RecuperarContrasena}/>`} />
+        <${Route} path="/reestablecer-contraseña" element=${html`<${ReestablecerContrasena}/>`} />
+        <${Route} path="*" element=${html`<${NotFound}/>`} />
+      <//>
+    <//>
+  `;
+}
+
+// ---------- Montaje ----------
+try {
+  createRoot(document.getElementById("root")).render(
+    html`<${HashRouter}><${App}/><//>`
+  );
+} catch (e) {
+  console.error("Fallo al montar la app:", e);
+  const root = document.getElementById("root");
+  if (root) root.innerHTML = `
+    <div style="padding:20px;color:#fff;font-family:monospace;background:#111">
+      Error al iniciar la aplicación.<br/>
+      <pre style="white-space:pre-wrap">${String(e && e.stack || e)}</pre>
+    </div>`;
+}
