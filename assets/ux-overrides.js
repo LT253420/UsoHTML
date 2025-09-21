@@ -9,8 +9,7 @@
   const homeBtn    = $('#homeBtn');
   const loginLoader= $('#loginLoader');
 
-  // --- PANTALLAS que intentaremos detectar automáticamente ---
-  // Ajustá esta lista si más adelante sumás nuevas pantallas (solo IDs).
+  // Pantallas que queremos manejar con animación
   const SCREEN_IDS = ['mainMenu', 'passwordMenu', 'fallasMenu'];
 
   // ---- PRELOADER INICIAL (barra de progreso) ----
@@ -29,13 +28,13 @@
     }, 120);
   }
   function endPreloader() {
-    try { clearInterval(tick); } catch {}
+    clearInterval(tick);
     setProgress(100);
     if (pre) {
-      pre.classList.add('hide'); // animación CSS de salida
+      pre.classList.add('hide');
       setTimeout(() => {
         pre.style.display = 'none';
-        document.body.classList.add('ui-ready'); // habilita HOME y muestra #root suave
+        document.body.classList.add('ui-ready'); // habilita HOME y fade-in
       }, 240);
     } else {
       document.body.classList.add('ui-ready');
@@ -45,8 +44,9 @@
   // ---- DETECTAR CUANDO REACT MONTA EN #root ----
   function onAppMounted(cb) {
     const root = document.getElementById('root');
-    if (!root) { cb(); return; }
-    if (root.childElementCount > 0) { cb(); return; }
+    if (!root) return cb();
+    if (root.childElementCount > 0) return cb();
+
     const obs = new MutationObserver(() => {
       if (root.childElementCount > 0) {
         obs.disconnect();
@@ -54,12 +54,17 @@
       }
     });
     obs.observe(root, { childList: true, subtree: false });
+
+    // Fallback
     setTimeout(() => {
-      if (root.childElementCount > 0) { try { obs.disconnect(); } catch{} cb(); }
+      if (root.childElementCount > 0) {
+        try { obs.disconnect(); } catch {}
+        cb();
+      }
     }, 2000);
   }
 
-  // ---- MARCAR PANTALLAS (agregar .menu-screen + ocultar salvo la principal) ----
+  // ---- MARCAR PANTALLAS ----
   function markScreens() {
     const found = [];
     SCREEN_IDS.forEach((id) => {
@@ -69,33 +74,29 @@
         found.push(el);
       }
     });
-    // Si encontramos pantallas, dejamos visible solo la primera (mainMenu si existe)
     if (found.length) {
-      // quitar is-active de todas
       found.forEach(x => x.classList.remove('is-active'));
-      // priorizar mainMenu si existe, si no, la primera que haya
       const main = document.getElementById('mainMenu') || found[0];
       if (main) main.classList.add('is-active');
     }
   }
 
-  // ---- CAMBIO DE PANTALLA CON ANIMACIÓN ----
+  // ---- CAMBIO DE PANTALLA ----
   function showScreen(targetId) {
     const target = document.getElementById(targetId);
     if (!target) return;
     const screens = $$('.menu-screen');
-    // ya está activa
     if (target.classList.contains('is-active')) return;
 
-    document.body.classList.add('leaving'); // dispara fadeOut en botones
+    document.body.classList.add('leaving');
     setTimeout(() => {
       screens.forEach(s => s.classList.remove('is-active'));
       target.classList.add('is-active');
       document.body.classList.remove('leaving');
-    }, 220); // coincide con duración de fadeOut CSS
+    }, 220);
   }
 
-  // ---- HOME: volver al inicio (recarga limpia) ----
+  // ---- HOME: volver al inicio ----
   function goHome() {
     document.body.classList.add('leaving');
     setTimeout(() => {
@@ -103,7 +104,7 @@
     }, 220);
   }
 
-  // ---- POST-LOGIN LOADER (usa el evento custom) ----
+  // ---- POST-LOGIN LOADER ----
   window.addEventListener('auth:login:success', () => {
     document.body.classList.add('loading');
     if (loginLoader) loginLoader.style.display = 'flex';
@@ -113,18 +114,12 @@
     }, 1200);
   });
 
-  // ---- AUTO-ENLACES POR TEXTO (opcional, no rompe si no encuentra) ----
-  // Intenta detectar botones típicos y asignar navegación:
-  //  - “Ingresar”  -> passwordMenu
-  //  - “Inicio”/“Home” -> mainMenu
+  // ---- AUTO-ENLACES POR TEXTO ----
   function autoWireButtons() {
     const btns = $$('button, [role="button"]');
     btns.forEach((btn) => {
       const t = (btn.textContent || '').trim().toLowerCase();
-      if (!t) return;
-
-      // evitar reasignar si ya tiene listener
-      if (btn.__wired) return;
+      if (!t || btn.__wired) return;
 
       if (t.includes('ingresar') || t.includes('entrar')) {
         const targetId = 'passwordMenu';
@@ -137,18 +132,15 @@
       if (t.includes('inicio') || t.includes('home')) {
         if (document.getElementById('mainMenu')) {
           btn.addEventListener('click', () => showScreen('mainMenu'));
-          btn.__wired = true;
         } else {
-          // si no hay mainMenu definido, que actúe de HOME (recarga limpia)
           btn.addEventListener('click', goHome);
-          btn.__wired = true;
         }
+        btn.__wired = true;
       }
     });
   }
 
-  // ---- EXPONER UNA API MUY SIMPLE (por si alguien te ayuda con React) ----
-  // Se puede llamar desde cualquier handler: window.goScreen('passwordMenu')
+  // ---- API global ----
   window.goScreen = showScreen;
 
   // ---- INIT ----
@@ -160,7 +152,8 @@
       autoWireButtons();
 
       if (homeBtn) homeBtn.addEventListener('click', goHome);
-      // Si React re-renderiza y mete los IDs después, probamos re-marcar y re-enlazar:
+
+      // Reintento por si React tarda en inyectar IDs
       setTimeout(() => { markScreens(); autoWireButtons(); }, 400);
       setTimeout(() => { markScreens(); autoWireButtons(); }, 1200);
     });
