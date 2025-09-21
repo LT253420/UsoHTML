@@ -1,4 +1,20 @@
 function Oh(e, t) {
+    for (var n = 0; n < t.length; n++) {
+        const r = t[n];
+        if (typeof r != "string" && !Array.isArray(r)) {
+            for (const i in r)
+                if (i !== "default" && !(i in e)) {
+                    const o = Object.getOwnPropertyDescriptor(r, i);
+                    o && Object.defineProperty(e, i, o.get ? o : {
+                        enumerable: !0,
+                        get: () => r[i]
+                    })
+                }
+        }
+    }
+    return Object.freeze(Object.defineProperty(e, Symbol.toStringTag, {
+        value: "Module"
+    }))
 }
 (function () {
     const t = document.createElement("link").relList;
