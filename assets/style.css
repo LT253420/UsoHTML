@@ -335,13 +335,46 @@ input[type="password"].response-box:-webkit-autofill:focus {
   * { animation: none !important; transition: none !important; }
 }
 
-/* ---------- Preloader (inicial) ---------- */
-/* Si tu build ya trae #preloader, lo mantenemos oculto para no bloquear */
-#preloader {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* Animaciones de entrada/salida para botones del menú */
+.button-container > button,
+#mainMenu .button-container > button,
+.menu-screen .button-container > button {
+  animation: fadeIn 320ms ease both;
 }
+
+/* estado de salida (lo activamos por JS antes de volver al inicio) */
+.leaving .button-container > button,
+.leaving #mainMenu .button-container > button,
+.leaving .menu-screen .button-container > button {
+  animation: fadeOut 220ms ease forwards;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(4px) scale(.98); filter: blur(.6px); }
+}
+
+/* Preloader por defecto visible (pantalla oscura + HUD suave) */
+#preloader {
+  position: fixed; inset: 0;
+  background: #1a1a1a;
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999;
+  animation: hudFade 300ms ease-out both;
+}
+
+/* Al ocultarse, que se desvanezca */
+#preloader.hide {
+  animation: fadeOut 260ms ease forwards;
+  pointer-events: none;
+}
+
+/* HOME inicialmente oculto hasta que la app esté lista (lo muestra el JS) */
+#homeBtn { display: none; }
+body.ui-ready #homeBtn { display: flex; }
+
+/* Suavizar que la app aparezca cuando termina el preloader */
+#root { opacity: 0; transition: opacity 240ms ease; }
+body.ui-ready #root { opacity: 1; }
 
 /* ---------- Loader post-login (overlay) ---------- */
 /* Aparece cuando el body tiene .loading (disparado por JS tras login ok) */
