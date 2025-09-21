@@ -861,6 +861,314 @@ img,video {
 }
 
 
+/* =========================
+   H O L O G R A P H I C  T H E M E   (override)
+   Pegar esto AL FINAL del index-6O8eZvEA.css original.
+   ========================= */
+
+/* ---------- Variables y fondos ---------- */
+:root {
+  --fondo-color: #262626;
+  --fondo-imagen: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAQAAADQ7KleAAAACXBIWXMAAAsSAAALEgHS3X78AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAA+4SURBVHja7J1dbBxXGYZ3ncR2jUloLqxGKWorKuANrUR...SU5ErkJggg=='); /* recortado por brevedad: usa tu base64 completa */
+  --fondo-imagen-claro: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAQAAADQ7KleAAAACXBIWXMAAAsSAAALEgHS3X78AAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAABJRSURBVHja7J17jFzVfYC/8a696/...SU5ErkJggg=='); /* idem */
+  --color-principal: #00c3ff;
+  --color-luz: #00c3ffcc;
+  --color-fondo-luz: #00c3ff0d;
+  --color-error: #ff0000;
+}
+
+/* ---------- Base global ---------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background-color: var(--fondo-color);
+  background-image: var(--fondo-imagen);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  color: var(--color-principal);
+  font-family: Consolas,"Courier New",monospace;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Modo claro opcional (si en algún momento agregás 'light-mode' a <body>) */
+body.light-mode {
+  --fondo-color: #f3f3f3;
+  --fondo-imagen: var(--fondo-imagen-claro);
+  background-color: var(--fondo-color);
+  background-image: var(--fondo-imagen);
+}
+
+/* ---------- Tipografías / títulos ---------- */
+h1, .text-4xl, .md\:text-2xl {
+  color: var(--color-principal) !important;
+  text-shadow: 0 0 8px var(--color-principal);
+}
+
+h2, .text-2xl, .text-xl {
+  color: #fff !important;
+  text-shadow: 0 0 8px var(--color-principal);
+}
+
+/* ---------- Botones genéricos y foco ---------- */
+button, [role="button"] {
+  background: transparent !important;
+  border: 2px solid var(--color-principal) !important;
+  color: var(--color-principal) !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+  transition: all .3s ease !important;
+  box-shadow: 0 0 8px var(--color-luz) !important;
+}
+
+button:hover, [role="button"]:hover,
+.hover\:bg-blue-1:hover {
+  background-color: var(--color-principal) !important;
+  color: #222 !important;
+  box-shadow: 0 0 15px var(--color-principal) !important;
+}
+
+/* ---------- Inputs “holográficos” ---------- */
+input, textarea, select {
+  background: transparent !important;
+  border: 2px solid var(--color-principal) !important;
+  color: var(--color-principal) !important;
+  padding: 10px 12px !important;
+  border-radius: 8px !important;
+  outline: none !important;
+  transition: all .3s ease !important;
+  box-shadow: 0 0 10px var(--color-luz) !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-luz) !important;
+  opacity: .8 !important;
+}
+
+input:focus, textarea:focus, select:focus,
+.focus\:border-blue-1:focus {
+  border-color: var(--color-principal) !important;
+  box-shadow: 0 0 20px var(--color-principal) !important;
+  background: var(--color-fondo-luz) !important;
+}
+
+/* Autofill Chrome/Edge en password (si aplica) */
+input[type="password"]:-webkit-autofill,
+input[type="password"]:-webkit-autofill:hover,
+input[type="password"]:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-principal) !important;
+  border: 2px solid var(--color-principal) !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(0,255,0,.08) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0,255,0,.08) inset !important;
+  caret-color: var(--color-principal) !important;
+}
+
+/* ---------- Re-mapeo de utilidades del bundle ---------- */
+/* Fondos blancos → transparentes/oscuros */
+.bg-white, .bg-white-1, .bg-white-2, .hover\:bg-white-1:hover {
+  background: transparent !important;
+}
+
+/* Texto azul/gris → paleta holográfica */
+.text-blue-1, .text-blue-2, .text-blue-3,
+.text-gray-500, .text-gray-900, .text-slate-600,
+.hover\:text-blue-1:hover, .hover\:text-blue-2:hover, .hover\:text-indigo-500:hover {
+  color: var(--color-principal) !important;
+}
+
+/* Bordes → paleta holográfica */
+.border, .border-gray-300, .border-\[\#DDDDDD\],
+.focus\:border-blue-1:focus {
+  border-color: var(--color-principal) !important;
+}
+
+/* Sombras → glow */
+.shadow-md {
+  box-shadow: 0 0 15px var(--color-principal) !important;
+}
+
+/* Fills (para íconos SVG) */
+.fill-blue-1, .group:hover .group-hover\:\!fill-white {
+  fill: var(--color-principal) !important;
+}
+
+/* Hover azul → usar color principal */
+.hover\:bg-blue-800:hover, .hover\:text-blue-800:hover {
+  background: var(--color-principal) !important;
+  color: #222 !important;
+}
+
+/* ---------- Botones de rama (si la UI los usa) ---------- */
+button.branch-btn{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .75rem;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid var(--color-principal);
+  background: transparent;
+  color: var(--color-principal);
+  box-shadow: 0 0 8px var(--color-luz);
+  transition: background .25s ease, box-shadow .25s ease, transform .06s ease;
+  overflow: hidden;
+}
+.branch-btn .label{ pointer-events: none; }
+button.branch-btn::after{
+  content: ">";
+  position: absolute; top:0; right:0; height:100%; width:58px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; background:#0a0a0a; border-left:2px solid var(--color-principal);
+  color:#111; text-shadow:none; transition: background .25s ease, box-shadow .25s ease, border-left-color .25s ease;
+}
+button.branch-btn.correcta::after{ background:#00ff00; border-left-color:#00ff00; }
+button.branch-btn.incorrecta::after{ background:#ff0000; border-left-color:#ff0000; }
+button.branch-btn.correcta:hover{ background:rgba(0,255,0,.15); box-shadow:0 0 15px #00ff00; }
+button.branch-btn.incorrecta:hover{ background:rgba(255,0,0,.15); box-shadow:0 0 15px #ff0000; }
+
+/* ---------- Caja de respuestas / textos ---------- */
+.response-box {
+  margin-top: 20px;
+  font-size: 1.05rem;
+  text-align: justify;
+  color: #ffffffcc !important;
+  padding: 10px;
+}
+
+/* ---------- Barra superior y footer (si existen) ---------- */
+.top-bar {
+  position: fixed; top:10px; width:100%; padding:10px 20px;
+  color: var(--color-principal); display:flex; justify-content:space-between; align-items:center; gap:0;
+  background-color: rgba(0,0,0,0.1);
+  z-index: 1000; box-sizing: border-box;
+}
+.top-bar button { margin-top: 10px; }
+
+.footer { position:relative; padding:20px 0 60px; margin-top:40px; text-align:center; width:100%; color:#404040; background:transparent; }
+
+/* ---------- Botón flotante (si existe) ---------- */
+.back-button {
+  position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px;
+  border: 2px solid var(--color-principal); background: #292929; display:flex; align-items:center; justify-content:center;
+  border-radius: 10px; cursor: pointer; box-shadow: 0 0 8px var(--color-luz); transition: all .3s ease; z-index: 999;
+}
+.back-button svg { fill: var(--color-principal); width:24px; height:24px; transition: fill .3s; }
+.back-button:hover { background-color: var(--color-principal); }
+.back-button:hover svg { fill: #222; }
+
+/* ---------- Animaciones ---------- */
+@keyframes fadeIn { 0%{opacity:0; transform:scale(.95)} 100%{opacity:1; transform:scale(1)} }
+.fade-in { animation: fadeIn .4s ease-in-out; }
+
+@keyframes hudFade {
+  0% { opacity:0; transform:scale(.9); filter:drop-shadow(0 0 8px var(--color-principal)); }
+  30%{ opacity:1; transform:scale(1.02); filter:drop-shadow(0 0 12px var(--color-principal)); }
+  60%{ opacity:1; transform:scale(1); filter:drop-shadow(0 0 6px var(--color-principal)); }
+}
+.hud-appear { animation: hudFade .4s ease-out; }
+
+@keyframes holographic-fade {
+  0% { opacity:0; filter:brightness(.3) blur(2px); transform:scale(.98); }
+  100%{ opacity:1; filter:brightness(1) blur(0); transform:scale(1); }
+}
+.holo-anim { animation: holographic-fade .4s ease-out; }
+
+/* ---------- Responsive mínimos ---------- */
+@media (max-width: 600px) {
+  html, body { width:100vw; max-width:100vw; overflow-x:hidden !important; }
+  h1 { font-size:1.5rem; margin:60px 10px 20px; }
+  .response-box { font-size:.95rem; }
+}
+
+/* ---------- Extras ---------- */
+/* Si el bundle tenía preloader bloqueando, lo forzamos a ocultarse */
+#preloader { display:none !important; visibility:hidden !important; pointer-events:none !important; }
+
+/* Evitar que TODO sea no-select si el bundle lo imponía */
+* { user-select: auto !important; }
+
+
+/* ===== Botones de ramas holográficos ===== */
+button.branch-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .75rem;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid var(--color-principal);
+  background: transparent;
+  color: var(--color-principal);
+  font-size: 1rem;
+  box-shadow: 0 0 8px var(--color-luz);
+  transition: background .25s ease, box-shadow .25s ease, transform .06s ease;
+  overflow: hidden; /* importante para que la franja no desborde */
+}
+
+button.branch-btn .label {
+  pointer-events: none; /* el texto no bloquea clicks */
+  flex: 1;
+  text-align: left;
+}
+
+/* Franja lateral con “>” */
+button.branch-btn::after {
+  content: ">";
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 58px; /* ancho de la franja */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: #0a0a0a; /* default */
+  border-left: 2px solid var(--color-principal);
+  color: #111;
+  transition: background .25s ease, border-left-color .25s ease;
+}
+
+/* Estado CORRECTA */
+button.branch-btn.correcta {
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 10px #00ff00;
+}
+button.branch-btn.correcta::after {
+  background-color: #00ff00;
+  border-left-color: #00ff00;
+}
+button.branch-btn.correcta:hover {
+  background: rgba(0, 255, 0, 0.15);
+  box-shadow: 0 0 15px #00ff00;
+}
+
+/* Estado INCORRECTA */
+button.branch-btn.incorrecta {
+  border-color: #ff0000;
+  color: #ff0000;
+  box-shadow: 0 0 10px #ff0000;
+}
+button.branch-btn.incorrecta::after {
+  background-color: #ff0000;
+  border-left-color: #ff0000;
+}
+button.branch-btn.incorrecta:hover {
+  background: rgba(255, 0, 0, 0.15);
+  box-shadow: 0 0 15px #ff0000;
+}
 
 
 /* =========================
@@ -1423,5 +1731,4 @@ input[type="password"].response-box:-webkit-autofill::first-line {
   font-family: inherit;
   color: var(--color-principal);
 }
-
 
