@@ -3,16 +3,15 @@
   const $  = (sel) => document.querySelector(sel);
   const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
-  const pre        = $('#preloader');
-  const fill       = $('#preFill');
-  const pct        = $('#prePercent');
-  const homeBtn    = $('#homeBtn');
-  const loginLoader= $('#loginLoader');
+  const pre         = $('#preloader');
+  const fill        = $('#progressFill'); // ← IDs reales del HTML
+  const pct         = $('#percentage');   // ← IDs reales del HTML
+  const homeBtn     = $('#homeBtn');
+  const loginLoader = $('#loginLoader');
 
-  // Pantallas que queremos manejar con animación
-  const SCREEN_IDS = ['mainMenu', 'passwordMenu', 'fallasMenu'];
+  const SCREEN_IDS = ['mainMenu', 'passwordMenu', 'fallasMenu', 'placaMenu', 'usoMenu', 'contactoMenu', 'respuestas'];
 
-  // ---- PRELOADER INICIAL (barra de progreso) ----
+  // ---------- PRELOADER ----------
   let progress = 0, tick;
   function setProgress(v) {
     progress = Math.max(0, Math.min(100, v|0));
@@ -31,17 +30,17 @@
     clearInterval(tick);
     setProgress(100);
     if (pre) {
-      pre.classList.add('hide');
+      pre.classList.add('hide');               // animación CSS de salida
       setTimeout(() => {
         pre.style.display = 'none';
-        document.body.classList.add('ui-ready'); // habilita HOME y fade-in
+        document.body.classList.add('ui-ready'); // muestra HOME / suaviza root
       }, 240);
     } else {
       document.body.classList.add('ui-ready');
     }
   }
 
-  // ---- DETECTAR CUANDO REACT MONTA EN #root ----
+  // ---------- Detectar cuando React montó algo en #root ----------
   function onAppMounted(cb) {
     const root = document.getElementById('root');
     if (!root) return cb();
@@ -53,7 +52,7 @@
         cb();
       }
     });
-    obs.observe(root, { childList: true, subtree: false });
+    obs.observe(root, { childList: true });
 
     // Fallback
     setTimeout(() => {
@@ -64,16 +63,14 @@
     }, 2000);
   }
 
-  // ---- MARCAR PANTALLAS ----
+  // ---------- Marcar pantallas con clase y activar solo la principal ----------
   function markScreens() {
     const found = [];
     SCREEN_IDS.forEach((id) => {
       const el = document.getElementById(id);
-      if (el) {
-        el.classList.add('menu-screen');
-        found.push(el);
-      }
+      if (el) { el.classList.add('menu-screen'); found.push(el); }
     });
+
     if (found.length) {
       found.forEach(x => x.classList.remove('is-active'));
       const main = document.getElementById('mainMenu') || found[0];
@@ -81,7 +78,7 @@
     }
   }
 
-  // ---- CAMBIO DE PANTALLA ----
+  // ---------- Cambio de pantalla con fade ----------
   function showScreen(targetId) {
     const target = document.getElementById(targetId);
     if (!target) return;
@@ -96,15 +93,27 @@
     }, 220);
   }
 
-  // ---- HOME: volver al inicio ----
+  // ---------- HOME (global) ----------
   function goHome() {
-    document.body.classList.add('leaving');
-    setTimeout(() => {
-      window.location.reload();
-    }, 220);
+    // Si existe mainMenu, vamos ahí con fade. Si no, recargamos limpio.
+    const main = document.getElementById('mainMenu');
+    if (main) {
+      document.body.classList.add('leaving');
+      setTimeout(() => {
+        $$('.menu-screen').forEach(s => s.classList.remove('is-active'));
+        main.classList.add('is-active');
+        document.body.classList.remove('leaving');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 220);
+    } else {
+      document.body.classList.add('leaving');
+      setTimeout(() => window.location.reload(), 220);
+    }
   }
+  // ← Hacemos accesible la función que tu botón llama
+  window.goToHome = goHome;
 
-  // ---- POST-LOGIN LOADER ----
+  // ---------- Loader post-login (opcional) ----------
   window.addEventListener('auth:login:success', () => {
     document.body.classList.add('loading');
     if (loginLoader) loginLoader.style.display = 'flex';
@@ -114,7 +123,7 @@
     }, 1200);
   });
 
-  // ---- AUTO-ENLACES POR TEXTO ----
+  // ---------- Autowire por texto (opcional) ----------
   function autoWireButtons() {
     const btns = $$('button, [role="button"]');
     btns.forEach((btn) => {
@@ -140,10 +149,10 @@
     });
   }
 
-  // ---- API global ----
+  // API global mínima
   window.goScreen = showScreen;
 
-  // ---- INIT ----
+  // ---------- INIT ----------
   document.addEventListener('DOMContentLoaded', () => {
     startPreloader();
     onAppMounted(() => {
@@ -153,7 +162,7 @@
 
       if (homeBtn) homeBtn.addEventListener('click', goHome);
 
-      // Reintento por si React tarda en inyectar IDs
+      // Reintentos por si React inyecta más tarde
       setTimeout(() => { markScreens(); autoWireButtons(); }, 400);
       setTimeout(() => { markScreens(); autoWireButtons(); }, 1200);
     });
