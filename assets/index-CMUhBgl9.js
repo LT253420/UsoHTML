@@ -1,20 +1,4 @@
 function Oh(e, t) {
-    for (var n = 0; n < t.length; n++) {
-        const r = t[n];
-        if (typeof r != "string" && !Array.isArray(r)) {
-            for (const i in r)
-                if (i !== "default" && !(i in e)) {
-                    const o = Object.getOwnPropertyDescriptor(r, i);
-                    o && Object.defineProperty(e, i, o.get ? o : {
-                        enumerable: !0,
-                        get: () => r[i]
-                    })
-                }
-        }
-    }
-    return Object.freeze(Object.defineProperty(e, Symbol.toStringTag, {
-        value: "Module"
-    }))
 }
 (function () {
     const t = document.createElement("link").relList;
@@ -15259,17 +15243,20 @@ xe.createPortal = function (e, t) {
     return sw(e, t, null, n)
 }
     ;
-document.addEventListener('DOMContentLoaded', () => {
-  const mount = document.getElementById('placaTree'); // o 'appContent' según tu HTML
-  if (!mount) return console.error('No se encontró el nodo de montaje');
-
-  // evitar crear más de un root (causa el #299)
-  if (!mount._reactRoot) {
-    mount._reactRoot = xe.createRoot(mount); // en algunos builds es ReactDOM.createRoot
-  }
-  mount._reactRoot.render(React.createElement(App));
-});
-
+xe.createRoot = function (e, t) {
+    if (!ou(e))
+        throw Error(E(299));
+    var n = !1
+        , r = ""
+        , i = fh;
+    return t != null && (t.unstable_strictMode === !0 && (n = !0),
+        t.identifierPrefix !== void 0 && (r = t.identifierPrefix),
+        t.onRecoverableError !== void 0 && (i = t.onRecoverableError)),
+        t = nu(e, 1, !1, null, null, n, !1, r, i),
+        e[ct] = t.current,
+        Gr(e.nodeType === 8 ? e.parentNode : e),
+        new iu(t)
+}
     ;
 xe.findDOMNode = function (e) {
     if (e == null)
@@ -17949,14 +17936,12 @@ function hS() {
                 className: "hover:text-blue-1 text-blue-2",
                 onClick: r(),
                 children: "Volver atrás"
-            }), ((u = (l = (a = e == null ? void 0 : e[e.length - 1]) == null ? void 0 : a.options) == null ? void 0 : l[0]) == null ? void 0 : u.solution) && g.jsx("button", {
-                className: "hover:text-blue-1 text-blue-2",
-                onClick: i(),
-                children: "Regresar al inicio"
-            })]
-        })]
-    })
-}
+            }) 
+            ]
+          })]
+        })
+    }
+
 function mS() {
     return g.jsxs("main", {
         className: "bg-white-1 flex-col flex w-full min-h-screen h-full px-4",
@@ -18377,16 +18362,11 @@ function CS() {
                     className: "text-2xl font-bold text-blue-3",
                     children: "Página no encontrada"
                 })]
-            }), g.jsx(Vt, {
-                type: "link",
-                variant: "primary",
-                className: "h-10",
-                href: "/",
-                children: "Volver al inicio"
-            })]
+            })
+       ]     })
         })
-    })
-}
+    }
+
 const kS = ({ oobCode: e }) => {
     const { isLoading: t, setIsLoading: n } = y.useContext(En)
         , r = Yt()
@@ -18470,17 +18450,11 @@ function xS() {
                     children: g.jsx(kS, {
                         oobCode: t
                     })
-                }), g.jsx("p", {
-                    className: "mt-10 text-center text-sm text-gray-500",
-                    children: g.jsx(lr, {
-                        to: "/ingresar",
-                        className: "font-semibold leading-6 text-indigo-600 hover:text-indigo-500",
-                        children: "Volver al inicio"
-                    })
-                })]
-            })
-        })
-}
+                })
+                 ]   })
+                })
+            }
+    
 const PS = () => {
     const { isLoading: e, setIsLoading: t } = y.useContext(En)
         , n = ({ data: o }) => {
@@ -18550,17 +18524,12 @@ function TS() {
             }), g.jsx("div", {
                 className: "mt-10 sm:mx-auto sm:w-full bg-white rounded-lg shadow-md px-6 py-12 lg:px-8",
                 children: g.jsx(PS, {})
-            }), g.jsx("p", {
-                className: "mt-10 text-center text-sm text-gray-500",
-                children: g.jsx(lr, {
-                    to: "/ingresar",
-                    className: "font-semibold leading-6 text-indigo-600 hover:text-indigo-500",
-                    children: "Volver al inicio"
-                })
-            })]
-        })
-    })
-}
+            })
+              ]  })
+            })
+        }
+    
+
 Ph(document.getElementById("root")).render(g.jsx(nl.StrictMode, {
     children: g.jsx(c_, {
         children: g.jsx(lS, {
@@ -18592,4 +18561,3 @@ Ph(document.getElementById("root")).render(g.jsx(nl.StrictMode, {
         })
     })
 }));
-
