@@ -13,5 +13,34 @@
   </head>
   <body>
     <div id="root"></div>
+     <div class="loader-overlay" id="loginLoader" aria-hidden="true">
+       <div class="loader" role="status" aria-label="Cargando"></div>
+     </div>
+    <!-- Botón HOME flotante -->
+<button id="homeBtn" class="back-button" title="Inicio" aria-label="Volver al inicio">
+  <!-- ícono casa -->
+  <svg viewBox="0 0 24 24" width="24" height="24">
+    <path d="M12 3l9 8h-3v10h-5V14H11v7H6V11H3l9-8z"/>
+  </svg>
+</button>
+
+<!-- Preloader inicial con barra de progreso -->
+<div id="preloader" aria-hidden="true">
+  <div class="loading-container">
+    <div class="percentage" id="prePercent">0%</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="preFill"></div>
+    </div>
+  </div>
+</div>
+
+<!-- (opcional) Loader post-login si aún no lo agregaste -->
+<div class="loader-overlay" id="loginLoader" aria-hidden="true">
+  <div class="loader" role="status" aria-label="Cargando"></div>
+</div>
+
+<!-- Hook de UX: se carga DESPUÉS del bundle -->
+<script defer src="/assets/ux-overrides.js"></script>
+
   </body>
 </html>
