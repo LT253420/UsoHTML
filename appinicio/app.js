@@ -341,7 +341,7 @@ function renderPlacaNodo(nodo) {
 // Hace que el botón "Inicio - Ver fallas" abra la appfranco
 window.mostrarFallasPlaca = function () {
   // Si appinicio y appfranco están en carpetas hermanas:
-  window.location.href = "../appfranco/index.html";
+  window.location.href = "/appfranco/index.html";
 
   // Si en tu estructura real están en otra ruta, dime y te lo ajusto exacto.
 };
