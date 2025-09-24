@@ -338,16 +338,14 @@ function renderPlacaNodo(nodo) {
 }
 
 // ==================== UI helpers para este módulo ====================
-window.mostrarFallasPlaca = () => {
-  if (typeof window.ocultarTodo === "function") window.ocultarTodo();
-  const sec = document.getElementById("placaMenu");
-  if (sec) {
-    sec.style.display = "flex";
-    sec.classList.add("hud-appear");
-  }
-  placaStack = [];
-  renderPlacaNodo(placaTreeData);
+// Hace que el botón "Inicio - Ver fallas" abra la appfranco
+window.mostrarFallasPlaca = function () {
+  // Si appinicio y appfranco están en carpetas hermanas:
+  window.location.href = "../appfranco/index.html";
+
+  // Si en tu estructura real están en otra ruta, dime y te lo ajusto exacto.
 };
+
 
 window.placaAtras = () => {
   if (!placaStack.length) {
