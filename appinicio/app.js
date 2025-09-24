@@ -340,10 +340,10 @@ function renderPlacaNodo(nodo) {
 // ==================== UI helpers para este módulo ====================
 // Hace que el botón "Inicio - Ver fallas" abra la appfranco
 window.mostrarFallasPlaca = function () {
-  // Si appinicio y appfranco están en carpetas hermanas:
-  window.location.href = "/appfranco/index.html";
-
-  // Si en tu estructura real están en otra ruta, dime y te lo ajusto exacto.
+  const url = "/appfranco/";  // o la que estés usando
+  console.log("[DEBUG] Navegando a:", url);
+  alert("Voy a: " + url); // ← temporal para ver en pantalla
+  window.location.href = url;
 };
 
 
