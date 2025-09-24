@@ -339,12 +339,12 @@ function renderPlacaNodo(nodo) {
 
 // ==================== UI helpers para este módulo ====================
 // Hace que el botón "Inicio - Ver fallas" abra la appfranco
+// Abrir appfranco desde appinicio (mismo dominio en Vercel)
 window.mostrarFallasPlaca = function () {
-  const url = "/appfranco/";  // o la que estés usando
-  console.log("[DEBUG] Navegando a:", url);
-  alert("Voy a: " + url); // ← temporal para ver en pantalla
-  window.location.href = url;
+  // Ruta ABSOLUTA en producción: /appfranco/
+  window.location.href = "/appfranco/";
 };
+
 
 
 window.placaAtras = () => {
