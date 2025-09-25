@@ -41,19 +41,20 @@
   <script defer src="./assets/ux-overrides.js"></script>
 
   <!-- Fallback del botón Home por si tu bundle no define goToHome() -->
-  <script>
-    (function () {
-      const btn = document.getElementById('homeBtn');
-      if (!btn) return;
-      btn.addEventListener('click', function () {
-        // Si existe goToHome en el bundle, úsalo; si no, vuelve a appinicio
-        if (typeof window.goToHome === 'function') {
-          window.goToHome();
-        } else {
-          window.location.href = '/appinicio/';
-        }
-      });
-    })();
-  </script>
+<script>
+  (function () {
+    const btn = document.getElementById('homeBtn');
+    if (!btn) return;
+
+    // limpiamos posibles handlers anteriores
+    btn.replaceWith(btn.cloneNode(true));
+    const fresh = document.getElementById('homeBtn');
+    fresh.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      window.location.href = "/appinicio/"; // vuelve al menú
+    });
+  })();
+</script>
 </body>
 </html>
