@@ -18577,3 +18577,5 @@ Ph(document.getElementById("root")).render(g.jsx(nl.StrictMode, {
         })
     })
 }));
+
+window.goToHome = () => { window.volverA("main"); document.getElementById("mainMenu").style.display = "flex"; };
