@@ -4,13 +4,6 @@
   ],
   "rewrites": [
     { "source": "/appinicio", "destination": "/appinicio/index.html" },
-    { "source": "/appfranco",  "destination": "/appfranco/index.html" },
-
-    // Permite acceder a CUALQUIER archivo dentro de /appfranco
-    { "source": "/appfranco/(.*)", "destination": "/appfranco/$1" },
-
-    // Si el bundle intenta pedir /assets/... desde el raíz,
-    // llévalo a los assets reales de appfranco
-    { "source": "/assets/(.*)", "destination": "/appfranco/assets/$1" }
+    { "source": "/appfranco",  "destination": "/appfranco/index.html" }
   ]
 }
