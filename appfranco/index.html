@@ -45,16 +45,15 @@
   (function () {
     const btn = document.getElementById('homeBtn');
     if (!btn) return;
-
-    // limpiamos posibles handlers anteriores
-    btn.replaceWith(btn.cloneNode(true));
+    btn.replaceWith(btn.cloneNode(true)); // limpia handlers previos del bundle
     const fresh = document.getElementById('homeBtn');
     fresh.addEventListener('click', function (ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      window.location.href = "/appinicio/"; // vuelve al menú
+      window.location.href = "/appinicio/index.html"; // <- vuelve al menú
     });
   })();
 </script>
+
 </body>
 </html>
