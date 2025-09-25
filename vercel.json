@@ -1,8 +1,9 @@
 {
-  "cleanUrls": true,
   "redirects": [
-    { "source": "/",           "destination": "/appinicio/" },
-    { "source": "/appinicio",  "destination": "/appinicio/index.html" },
+    { "source": "/", "destination": "/appinicio/index.html", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/appinicio", "destination": "/appinicio/index.html" },
     { "source": "/appfranco",  "destination": "/appfranco/index.html" }
   ]
 }
