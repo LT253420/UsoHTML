@@ -1,9 +1,0 @@
-{
-  "redirects": [
-    { "source": "/", "destination": "/appinicio/index.html", "permanent": false }
-  ],
-  "rewrites": [
-    { "source": "/appinicio", "destination": "/appinicio/index.html" },
-    { "source": "/appfranco",  "destination": "/appfranco/index.html" }
-  ]
-}
