@@ -4,9 +4,4 @@
   ],
   "rewrites": [
     { "source": "/appinicio", "destination": "/appinicio/index.html" },
-    { "source": "/appfranco", "destination": "/appfranco/index.html" },
-
-    // --- FIX assets absolutos del bundle de appfranco ---
-    { "source": "/assets/:path*", "destination": "/appfranco/assets/:path*" }
-  ]
-}
+    { "source": "/appfranco", "destination": "/appfranco/index.html" }
