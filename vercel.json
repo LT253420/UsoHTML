@@ -1,0 +1,12 @@
+{
+  "redirects": [
+    { "source": "/", "destination": "/appinicio/index.html", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/appinicio", "destination": "/appinicio/index.html" },
+    { "source": "/appfranco", "destination": "/appfranco/index.html" },
+
+    // --- FIX assets absolutos del bundle de appfranco ---
+    { "source": "/assets/:path*", "destination": "/appfranco/assets/:path*" }
+  ]
+}
