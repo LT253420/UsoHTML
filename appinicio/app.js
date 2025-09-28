@@ -343,7 +343,7 @@ function renderPlacaNodo(nodo) {
 // al pulsar "Inicio - Ver fallas"
 // appinicio/app.js
 window.mostrarFallasPlaca = function () {
-  window.location.href = "/appfranco/index.html";
+  window.location.href = "/appfranco/";
 };
 
 
