@@ -1,9 +1,8 @@
-{
-  
+  ],
   "rewrites": [
     { "source": "/appinicio", "destination": "/appinicio/index.html" },
+    { "source": "/appfranco",  "destination": "/appfranco/index.html" }
     { "source": "/appfranco", "destination": "/appfranco/index.html" },
     { "source": "/appfranco/", "destination": "/appfranco/index.html" },
     { "source": "/appfranco/:path*", "destination": "/appfranco/index.html" }
   ]
-}
